@@ -1,0 +1,4 @@
+{   "python.pythonPath": "/home/tintash/.virtualenvs/django-dev/bin/python",
+    "python.linting.pylintArgs": [
+    "--load-plugins=pylint_django"
+],}
