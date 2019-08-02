@@ -18,13 +18,15 @@ class UserSerializer(serializers.ModelSerializer):
 
 class TweetSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
+
     class Meta:
         model = Tweet   
         fields = ['id', 'content', 'owner', 'createdat']
 
 
-class UserrelationSerializer(serializers.ModelSerializer):
-
+class UserRelationSerializer(serializers.ModelSerializer):
+    user = serializers.ReadOnlyField(source ='user.id')
+    
     class Meta:
         model = Userrelation
         fields = ['id', 'user', 'following', 'createdat']
