@@ -8,3 +8,6 @@ class Tweet(models.Model):
 
     class Meta:
         ordering = ['createdat']
+
+
+

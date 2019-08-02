@@ -3,6 +3,7 @@ from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 
 from .models.tweet import Tweet
+from .models.userrelation import Userrelation
 
 class UserSerializer(serializers.ModelSerializer):
     # tweets = serializers.PrimaryKeyRelatedField(many=True, queryset=Tweet.objects.all()) 
@@ -20,3 +21,10 @@ class TweetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tweet   
         fields = ['id', 'content', 'owner', 'createdat']
+
+
+class UserrelationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Userrelation
+        fields = ['id', 'user', 'following', 'createdat']
