@@ -12,7 +12,9 @@ urlpatterns = [
     path('users/', views.UserList.as_view()),
     path('tweets/', views.TweetList.as_view()),
     path('tweets/<int:pk>/', views.TweetDetail.as_view()),
-    path('follow/', views.UserRelationCreate.as_view())
+    path('follow/', views.UserRelationCreateList.as_view()),
+    path('followings/', views.FollowingList.as_view()),
+    path('followers/', views.FollowerList.as_view())
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
