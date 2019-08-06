@@ -4,6 +4,7 @@ from rest_framework import permissions
 
 from .models.tweet import Tweet
 from .models.userRelation import UserRelation
+from .models.like import TweetLike
 from .serializers import UserSerializer, TweetSerializer, UserRelationSerializer, FollowingSerializer, FollowerSerializer, LikeSerializer
 from .permissions import IsOwnerOrReadOnly
 
@@ -20,7 +21,7 @@ class UserList(generics.ListAPIView):
 
 
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
@@ -34,7 +35,7 @@ class TweetList(generics.ListCreateAPIView):
 
 
 class TweetDetail(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     queryset = Tweet.objects.all()
     serializer_class = TweetSerializer
 
@@ -42,13 +43,13 @@ class TweetDetail(generics.RetrieveUpdateDestroyAPIView):
 class UserRelationCreateList(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        serializer.save(owner=self.request.user)
     queryset = UserRelation.objects.all()
     serializer_class = UserRelationSerializer
 
 
 class UserRelationUpdate(generics.RetrieveDestroyAPIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     queryset = UserRelation.objects.all()
     serializer_class = UserRelationSerializer
 
@@ -61,6 +62,7 @@ class FollowingList(generics.ListAPIView):
         user = self.request.user
         return UserRelation.objects.filter(user=user)
 
+
 class FollowerList(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class = FollowerSerializer
@@ -70,12 +72,19 @@ class FollowerList(generics.ListAPIView):
         return UserRelation.objects.filter(following=user)
 
 
-class LikeaTweet(generics.CreateAPIView):
+class LikeaTweet(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = LikeSerializer
+    queryset = TweetLike.objects.all()
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+
+
+class UnlikeaTweet(generics.DestroyAPIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+    serializer_class = LikeSerializer
+    queryset = TweetLike.objects.all()
 
 
 class NewsFeed(generics.ListAPIView):

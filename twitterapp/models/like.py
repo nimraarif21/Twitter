@@ -8,5 +8,6 @@ class TweetLike(models.Model):
     owner = models.ForeignKey('auth.User', related_name='tweets_liked', on_delete=models.CASCADE)
 
     class Meta:
+        unique_together = ('tweet', 'owner',)
         ordering = ['created_at']
         

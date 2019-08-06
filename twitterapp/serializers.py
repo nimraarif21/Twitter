@@ -26,10 +26,10 @@ class TweetSerializer(serializers.ModelSerializer):
 
 
 class UserRelationSerializer(serializers.ModelSerializer):
-    user = serializers.ReadOnlyField(source='user.id')
+    owner = serializers.ReadOnlyField(source='owner.id')
     class Meta:
         model = UserRelation
-        fields = ['id', 'user', 'following']
+        fields = ['id', 'owner', 'following']
 
 
 class FollowingSerializer(serializers.ModelSerializer):
@@ -53,5 +53,5 @@ class LikeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TweetLike  
-        fields = ['owner', 'tweet']
+        fields = ['id', 'owner', 'tweet']
 

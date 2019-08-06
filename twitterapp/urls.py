@@ -16,6 +16,7 @@ urlpatterns = [
     path('followings/', views.FollowingList.as_view()),
     path('followers/', views.FollowerList.as_view()),
     path('like/', views.LikeaTweet.as_view()),
+    path('unlike/<int:pk>/', views.UnlikeaTweet.as_view()),
     path('newsfeed/', views.NewsFeed.as_view())
 ]
 
