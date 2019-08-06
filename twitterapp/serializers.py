@@ -5,6 +5,7 @@ from django.contrib.auth.hashers import make_password
 from .models.tweet import Tweet
 from .models.userRelation import UserRelation
 from .models.like import TweetLike
+from .models.comment import Comment
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -54,4 +55,14 @@ class LikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = TweetLike  
         fields = ['id', 'owner', 'tweet']
+
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.id')
+
+    class Meta:
+        model = Comment
+        fields = ['id', 'content', 'owner', 'tweet', 'created_at']
+
 

@@ -5,7 +5,8 @@ from rest_framework import permissions
 from .models.tweet import Tweet
 from .models.userRelation import UserRelation
 from .models.like import TweetLike
-from .serializers import UserSerializer, TweetSerializer, UserRelationSerializer, FollowingSerializer, FollowerSerializer, LikeSerializer
+from .models.comment import Comment
+from .serializers import UserSerializer, TweetSerializer, UserRelationSerializer, FollowingSerializer, FollowerSerializer, LikeSerializer, CommentSerializer
 from .permissions import IsOwnerOrReadOnly
 
 
@@ -95,3 +96,17 @@ class NewsFeed(generics.ListAPIView):
         user = self.request.user
         following = UserRelation.objects.filter(user=user).values_list('following', flat=True)
         return Tweet.objects.filter(owner__in=following)
+
+
+class CommentList(generics.ListCreateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+    serializer_class = CommentSerializer
+    queryset = Comment.objects.all()
+
+
+class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer

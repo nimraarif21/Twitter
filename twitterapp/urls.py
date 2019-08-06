@@ -17,7 +17,9 @@ urlpatterns = [
     path('followers/', views.FollowerList.as_view()),
     path('like/', views.LikeaTweet.as_view()),
     path('unlike/<int:pk>/', views.UnlikeaTweet.as_view()),
-    path('newsfeed/', views.NewsFeed.as_view())
+    path('newsfeed/', views.NewsFeed.as_view()),
+    path('comments/', views.CommentList.as_view()),
+    path('comments/<int:pk>/', views.CommentDetail.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
