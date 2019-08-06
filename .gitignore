@@ -1,3 +1,7 @@
-Twitter/__pycache__
+__pycache__
 .vscode/
 .gitignore
+Twitter/__pycache__
+twitterapp/__pycache__
+twitterapp/models/__pycache__
+twitterapp/migrations/__pycache__

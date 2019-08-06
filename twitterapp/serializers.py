@@ -4,9 +4,10 @@ from django.contrib.auth.hashers import make_password
 
 from .models.tweet import Tweet
 from .models.userRelation import UserRelation
+from .models.like import TweetLike
+
 
 class UserSerializer(serializers.ModelSerializer):
-    # tweets = serializers.PrimaryKeyRelatedField(many=True, queryset=Tweet.objects.all()) 
     def validate_password(self, value: str) -> str:
         return make_password(value)
 
@@ -17,8 +18,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class TweetSerializer(serializers.ModelSerializer):
-    owner = serializers.ReadOnlyField(source = 'owner.id')
-    # owner = UserSerializer()
+    owner = serializers.ReadOnlyField(source='owner.id')
 
     class Meta:
         model = Tweet   
@@ -26,7 +26,7 @@ class TweetSerializer(serializers.ModelSerializer):
 
 
 class UserRelationSerializer(serializers.ModelSerializer):
-    user = serializers.ReadOnlyField(source ='user.id')
+    user = serializers.ReadOnlyField(source='user.id')
     class Meta:
         model = UserRelation
         fields = ['id', 'user', 'following']
@@ -46,3 +46,12 @@ class FollowerSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserRelation
         fields = ['user']
+
+
+class LikeSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source = 'owner.id')
+
+    class Meta:
+        model = TweetLike  
+        fields = ['owner', 'tweet']
+
