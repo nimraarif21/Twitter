@@ -6,7 +6,7 @@ from .models.tweet import Tweet
 from .models.userRelation import UserRelation
 from .models.like import TweetLike
 from .models.comment import Comment
-from .serializers import UserSerializer, TweetSerializer, UserRelationSerializer, FollowingSerializer, FollowerSerializer, LikeSerializer, CommentSerializer
+from .serializers import UserSerializer, TweetSerializer, UserRelationSerializer, FollowingSerializer, FollowerSerializer, LikeSerializer, CommentSerializer, NewsFeedSerializer
 from .permissions import IsOwnerOrReadOnly
 
 
@@ -90,16 +90,16 @@ class UnlikeaTweet(generics.DestroyAPIView):
 
 class NewsFeed(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
-    serializer_class = TweetSerializer
-
+    serializer_class = NewsFeedSerializer
     def get_queryset(self):
         user = self.request.user
-        following = UserRelation.objects.filter(user=user).values_list('following', flat=True)
+        following = UserRelation.objects.filter(owner=user).values_list('following', flat=True)
         return Tweet.objects.filter(owner__in=following)
 
 
 class CommentList(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
+
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
     serializer_class = CommentSerializer

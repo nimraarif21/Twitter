@@ -66,3 +66,15 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = ['id', 'content', 'owner', 'tweet', 'created_at']
 
 
+class NewsFeedSerializer(serializers.ModelSerializer):
+    likes = LikeSerializer(many=True)
+    comments = CommentSerializer(many=True)
+    likes = serializers.SerializerMethodField()
+
+    def get_likes(self, obj):
+        return obj.likes.count()
+
+    class Meta:
+        model = Tweet   
+        fields = ['id', 'content', 'owner', 'likes', 'comments', 'created_at']
+
