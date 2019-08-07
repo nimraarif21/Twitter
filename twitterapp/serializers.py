@@ -67,7 +67,6 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class NewsFeedSerializer(serializers.ModelSerializer):
-    likes = LikeSerializer(many=True)
     comments = CommentSerializer(many=True)
     likes = serializers.SerializerMethodField()
 
