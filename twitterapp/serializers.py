@@ -22,12 +22,13 @@ class TweetSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.id')
 
     class Meta:
-        model = Tweet   
+        model = Tweet 
         fields = ['id', 'content', 'owner', 'created_at']
 
 
 class UserRelationSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.id')
+
     class Meta:
         model = UserRelation
         fields = ['id', 'owner', 'following']
@@ -50,11 +51,11 @@ class FollowerSerializer(serializers.ModelSerializer):
 
 
 class LikeSerializer(serializers.ModelSerializer):
-    owner = serializers.ReadOnlyField(source = 'owner.id')
+    owner = serializers.ReadOnlyField(source='owner.id')
 
     class Meta:
         model = TweetLike  
-        fields = ['id', 'owner', 'tweet']
+        fields = '__all__'
 
 
 
@@ -63,17 +64,17 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ['id', 'content', 'owner', 'tweet', 'created_at']
+        fields = '__all__'
 
 
 class NewsFeedSerializer(serializers.ModelSerializer):
     comments = CommentSerializer(many=True)
     likes = serializers.SerializerMethodField()
+    owner = UserSerializer()
 
     def get_likes(self, obj):
         return obj.likes.count()
 
     class Meta:
         model = Tweet   
-        fields = ['id', 'content', 'owner', 'likes', 'comments', 'created_at']
-
+        fields = '__all__'

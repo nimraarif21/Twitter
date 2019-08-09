@@ -1,17 +1,17 @@
-from django.urls import path
+from django.urls import path, include
 from rest_framework.urlpatterns import format_suffix_patterns
-from twitterapp import views
-from django.conf.urls import include
 from rest_framework_simplejwt import views as jwt_views
+from rest_framework.routers import DefaultRouter
+from twitterapp import views
+
+router = DefaultRouter()
+router.register(r'users', views.UserViewSet)
+router.register(r'tweets', views.TweetViewSet)
 
 urlpatterns = [
-    path('signup/', views.UserSignUp.as_view()),
+    path('', include(router.urls)),
     path('login/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('login/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
-    path('user/<int:pk>/', views.UserDetail.as_view()),
-    path('users/', views.UserList.as_view()),
-    path('tweets/', views.TweetList.as_view()),
-    path('tweets/<int:pk>/', views.TweetDetail.as_view()),
     path('follow/', views.UserRelationCreateList.as_view()),
     path('followings/', views.FollowingList.as_view()),
     path('followers/', views.FollowerList.as_view()),
@@ -22,4 +22,3 @@ urlpatterns = [
     path('comments/<int:pk>/', views.CommentDetail.as_view()),
 ]
 
-urlpatterns = format_suffix_patterns(urlpatterns)
